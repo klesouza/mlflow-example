@@ -1,0 +1,22 @@
+version: '3'
+services:
+  tracking:
+    build:
+      context: ./tracking-server
+    ports: 
+      - "5000:5000"
+    depends_on: 
+      - db
+
+  model:
+    build:
+      context: ./model
+    environment: 
+      MLFLOW_TRACKING_URI: http://tracking:5000/
+    depends_on: 
+      - tracking
+
+  db:
+    image: postgres
+    environment: 
+      POSTGRES_PASSWORD: example
